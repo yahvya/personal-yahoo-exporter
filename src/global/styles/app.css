@@ -21,15 +21,21 @@
 
     /* couleur de fond */
     --background-color: #212020;
+    --background-color-details: 33, 32, 32;
     --background-up-color: #eae3e3;
+    --background-up-color-details: 234, 227, 227;
 
     /* couleur sur le fond */
     --on-background-color: #414141;
+    --on-background-color-details: 65, 65, 65;
     --on-background--up-color: #eae3e3;
+    --on-background--up-color-details: 234, 227, 227;
 
     /* couleur spécial */
-    --special-background-color: ;
-    --special-background-up-color: ;
+    --special-background-color: #0587e4;
+    --special-background-color-details: 5, 135, 228;
+    --special-background-up-color: #eae3e3;
+    --special-background-up-color-details: 234, 227, 227;
 }
 
 
