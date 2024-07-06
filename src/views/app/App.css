@@ -9,7 +9,8 @@
 .app-form{
     margin: auto;
     margin-top: 50px;
-    width: fit-content;
+    margin-bottom: 80px;
+    width: 500px;
     max-width: 90%;
 }
 
@@ -18,5 +19,23 @@
 }
 
 .app-form .section{
+    margin-top: 30px;
+    font-family: var(--special-font);
+}
+
+.app-form .choice input.form-input{
+    width: 20px;
+    height: auto;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.app-form .choice{
+    padding: 5px;
+    border-radius: 3px;
+    background-color: var(--on-background-color);
+}
+
+.app-form .app-button{
     margin-top: 30px;
 }
