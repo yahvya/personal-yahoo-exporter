@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
-import App from './views/App.vue'
-import "./global/styles/app.css";
+import App from '@/views/app/App.vue'
+import "@/global/styles/app.css";
 
 createApp(App).mount('#app').$nextTick(() => {
   // Use contextBridge

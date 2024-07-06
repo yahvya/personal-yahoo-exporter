@@ -1,0 +1,22 @@
+.page-title{
+    margin-bottom: 50px;
+}
+
+.info-message{
+    width: 500px !important;
+}
+
+.app-form{
+    margin: auto;
+    margin-top: 50px;
+    width: fit-content;
+    max-width: 90%;
+}
+
+.app-form .form-input{
+    margin-bottom: 30px !important;
+}
+
+.app-form .section{
+    margin-top: 30px;
+}
