@@ -1,6 +1,7 @@
 import { ExportConfig, ExportPoliciesTypes, ExportType } from "../configs/ExportConfig.ts";
 import {yahooDefaultConfig,YahooExportConfig} from "../configs/YahooConfig.ts";
 import { ClassicFile } from "../file/ClassicFile.ts";
+import open from "open";
 
 /**
  * @brief Gestion de l'export yahoo
@@ -15,16 +16,6 @@ export class YahooExporter{
      * @brief Gestionnaire du dossier racine
      */
     protected baseDirectoryManager:ClassicFile;
-
-    /**
-     * @brief Gestionnaire du dossier des fichiers joints
-     */
-    protected attachementsDirectoryManager:ClassicFile;
-
-    /**
-     * @brief Gestionnaire du dossier des fichiers d'export
-     */
-    protected exportsDirectoryManager:ClassicFile;
 
     /**
      * @brief Mode d'export
@@ -43,8 +34,6 @@ export class YahooExporter{
         
         const baseDirPath = `${exportConfig.savePath}${YahooExporter.formatDirname(exportConfig.saveDirname)}/`;
         this.baseDirectoryManager = new ClassicFile(baseDirPath);
-        this.attachementsDirectoryManager = new ClassicFile(`${baseDirPath}fichiers-joints/`);
-        this.exportsDirectoryManager = new ClassicFile(`${baseDirPath}exports/`);
 
         // recherche de la politique d'export (dépendance circulaire avec exportpolicy évité)
         const exportModeConfig:ExportType<ExportPoliciesTypes>|undefined = ExportConfig.find((config:ExportType<ExportPoliciesTypes>) => config.value === this.exportConfig.exportMode);
@@ -64,13 +53,7 @@ export class YahooExporter{
                     throw new Error();
 
                 // création du dossier racine des résultats, dossier des fichiers joints et des fichiers d'export
-                if(
-                    !this.baseDirectoryManager.createDirectory() ||
-                    !this.attachementsDirectoryManager.createDirectory() ||
-                    !this.exportsDirectoryManager.createDirectory()
-                ){
-                    this.baseDirectoryManager.deleteDirectory();
-
+                if(!this.baseDirectoryManager.createDirectory()){
                     reject("Echec de création du dossier résultat");
                     return;
                 }
@@ -95,25 +78,18 @@ export class YahooExporter{
         return this.baseDirectoryManager;
     }
 
-    /**
-     * @returns Gestionnaire du dossier des fichiers joints
-     */
-    public getAttachementsDirectoryManager():ClassicFile{
-        return this.attachementsDirectoryManager;
-    }
-
-    /**
-     * @returns Gestionnaire du dossier des fichiers d'export
-     */
-    public getExportsDirectoryManager():ClassicFile{
-        return this.exportsDirectoryManager;
-    }
-
     /** 
      * @returns Le mode d'export
      */
     public getExportMode():ExportType<ExportPoliciesTypes>|undefined{
         return this.exportMode;
+    }
+
+    /**
+     * @returns La configuration d'export
+     */
+    public getExportConfig():YahooExportConfig{
+        return this.exportConfig;
     }
 
     /**
@@ -127,14 +103,39 @@ export class YahooExporter{
         /**
          * @todo supprimer le test
          */
-        await exportPolicy.export({
-            subject: "Sujet de test",
-            message: "Contenu du mail de test",
-            joinedFiles: [],
-            sendDate: "07-07-2024"
-        });
+        await exportPolicy
+            .export({
+                subject: "Sujet de test",
+                message: "Contenu du mail de test",
+                attachments: [],
+                sendDate: "07-07-2024"
+            })
+            .catch((error:string) => {
+                reject(error);
+            });
+
+        await exportPolicy
+            .export({
+                subject: "Sujet de test 2",
+                message: "Contenu du mail de test 2",
+                attachments: [],
+                sendDate: "09-07-2024"
+            })
+            .catch((error:string) => {
+                reject(error);
+            });
+
+        // finalisation
+        await exportPolicy
+            .finalize()
+            .catch((error:string) => {
+                reject(error);
+            });
 
         resolve();
+
+        // ouverture du dossier
+        open(this.baseDirectoryManager.getAbsolutePath());
     }
 
     /**

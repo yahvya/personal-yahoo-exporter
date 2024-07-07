@@ -29,6 +29,6 @@ export const ExportConfig: Array<ExportType<ExportPoliciesTypes>> = [
     {
         label: "Suite de fichiers",
         value: "files-list",
-        policy: WordDocumentPolicy
+        policy: FilesListPolicy
     },
 ]; 

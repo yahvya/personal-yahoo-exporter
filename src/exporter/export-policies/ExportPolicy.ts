@@ -23,4 +23,11 @@ export abstract class ExportPolicy{
      * @returns Promosse de réussite ou echec
      */
     public abstract export(mailConfig:MailConfig):Promise<void>;
+
+    /**
+     * @brief Finalise la police
+     * @returns Promesse de réussite
+     */
+    public async finalize():Promise<void>{
+    }
 }

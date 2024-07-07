@@ -4,7 +4,7 @@
     import FormInput from "@/components/form-input/FormInput.vue";
     import Button from "@/components/button/Button.vue";
     import Loader from "@/components/loader/Loader.vue";
-    import {ExportConfig} from "@/exporter/configs/ExportConfig.ts";
+    import {ExportConfig} from "@/exporter/configs/ExportConfigView.ts";
     import {eventsConfig,EventState} from "@/exporter/configs/EventsConfig.ts";
 
     export default{

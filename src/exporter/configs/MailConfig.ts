@@ -20,12 +20,20 @@ export interface MailConfig{
     /**
      * @brief Fichiers joints
      */
-    joinedFiles:Array<JoinedFiles>;
+    attachments:Array<AttachmentConfig>;
 }
 
 /**
  * @brief Description des fichiers joints
  */
-export interface JoinedFiles{
-    
+export interface AttachmentConfig{
+    /**
+     * @brief Type d'élément
+     */
+    type:string;
+
+    /**
+     * @brief Nom du fichier dans le dossier des fichiers joints 
+     */
+    filename?:string;
 }

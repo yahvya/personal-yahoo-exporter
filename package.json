@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@types/puppeteer": "^7.0.4",
+    "docx": "^8.5.0",
+    "open": "^10.1.0",
     "vite-plugin-commonjs": "^0.10.1",
     "vue": "^3.4.21"
   },
