@@ -29,12 +29,22 @@
                 }
             }
         },
-        setup(){
-            window.ipcRenderer.on(eventsConfig.exportResult.name,() => {
-
-            });
+        mounted() {
+            window.ipcRenderer.on(eventsConfig.exportResult.name, this.handleExportResult);
+        },
+        beforeUnmount() {
+            window.ipcRenderer.removeListener(eventsConfig.exportResult.name, this.handleExportResult);
         },
         methods: {
+            /**
+             * @brief Gère la réception des résultats d'exportation
+             */
+            handleExportResult(){
+                this.isValidating = false;
+            },
+            /**
+             * @brief Gère l'envoi des données
+             */
             submitForm(){
                 if(this.isValidating)
                     return;
