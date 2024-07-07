@@ -4,8 +4,8 @@
     import FormInput from "@/components/form-input/FormInput.vue";
     import Button from "@/components/button/Button.vue";
     import Loader from "@/components/loader/Loader.vue";
-    import ExportConfig from "@/exporter/ExportConfig.ts";
-    import {eventsConfig} from "@/exporter/EventsConfig.ts";
+    import {ExportConfig} from "@/exporter/configs/ExportConfig.ts";
+    import {eventsConfig,EventState} from "@/exporter/configs/EventsConfig.ts";
 
     export default{
         components: {
@@ -18,11 +18,12 @@
             return {
                 exportConfig: ExportConfig,
                 isValidating: false,
+                errorMessage: null,
                 form: {
                     userEmail: "test@yahoo.fr",
                     userPassword: "test-password",
                     conversationEmail: "test2@yahoo.fr",
-                    savePath: "C://path",
+                    savePath: "C:\\Users\\devel\\Desktop\\fichiers-temporaires",
                     saveDirname: "savedir",
                     exportMode: "files-list",
                     controlChoice: "yes"
@@ -39,8 +40,11 @@
             /**
              * @brief Gère la réception des résultats d'exportation
              */
-            handleExportResult(){
+            handleExportResult(_,successState,message = null){
                 this.isValidating = false;
+                
+                if(successState == EventState.FAILURE)
+                    this.errorMessage = message;
             },
             /**
              * @brief Gère l'envoi des données
@@ -50,6 +54,7 @@
                     return;
                 
                 this.isValidating = true;
+                this.errorMessage = null;
                 window.ipcRenderer.send(eventsConfig.launchExport.name,{...this.form});
             }
         }
@@ -175,6 +180,10 @@
                 />
             </div>
         </div>
+
+        <InfoMessage
+            v-if="errorMessage"
+        >{{ errorMessage }}</InfoMessage>
         
         <Button>Démarrer la récupération</Button>
     </form>

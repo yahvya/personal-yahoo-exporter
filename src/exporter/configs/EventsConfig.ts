@@ -13,6 +13,15 @@ export interface EventsConfig{
 }
 
 /**
+ * @brief Etat d'un évènement
+ */
+export enum EventState{
+    FAILURE,
+    SUCCESS,
+    INFO
+}
+
+/**
  * @brief Configuration des évènements d'export
  */
 export const eventsConfig: EventsConfig = {
