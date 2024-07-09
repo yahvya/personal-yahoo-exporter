@@ -2,6 +2,7 @@ import { ExportConfig, ExportPoliciesTypes, ExportType } from "../configs/Export
 import {yahooDefaultConfig,YahooExportConfig} from "../configs/YahooConfig.ts";
 import { ClassicFile } from "../file/ClassicFile.ts";
 import open from "open";
+import { YahooScrapper } from "../scrapper/YahooScrapper.ts";
 
 /**
  * @brief Gestion de l'export yahoo
@@ -98,44 +99,55 @@ export class YahooExporter{
      * @param reject rejet de promesse
      */
     protected async launchExport(resolve:(value: void | PromiseLike<void>) => void,reject: (reason?: any) => void):Promise<void>{
-        const exportPolicy = new this.exportMode!.policy(this);
+        try{
+            const exportPolicy = new this.exportMode!.policy(this);
+            const scrapper = new YahooScrapper(
+                /**
+                 * @todo récupérer les sélecteurs à partir d'un document modifiable de manière externe
+                 */
+                {
+                    loginAccessButtonSelector: "div[role=toolbar]",
+                    emailInputSelector: "#login-username",
+                    emailNextButtonSelector: "#login-signin",
+                    passwordInputSelector: "#login-passwd",
+                    signingButtonSelector: "#login-signin",
+                    mailAccessIconSelector: "div[role=toolbar] div:has(input[name=mail_wssid])",
+                    searchbarSelector: "table[role=presentation] input[name=s]",
+                    searchValidationButtonSelector: "table[role=presentation] button[name=srchMail]",
+                    mailRowSelector: "tr[data-test-id=message-list-item]",
+                    aMailSubjectSelector: "div[data-test-id=subject] h2",
+                    aMailSendDateSelector: "div[data-test-id=message-header] div[data-test-id=subject] ~ div span span",
+                    aMailContentSelector: "div[data-test-id=message-body] div[dir=ltr]",
+                    nextMailPageSelector: "div[data-test-id=pagination] span[data-test-id=pageNumber] ~ a"
+                },
+                {
+                    email: this.exportConfig.userEmail,
+                    password: this.exportConfig.userPassword,
+                    conversationEmail: this.exportConfig.conversationEmail
+                }
+            );
 
-        /**
-         * @todo supprimer le test
-         */
-        await exportPolicy
-            .export({
-                subject: "Sujet de test",
-                message: "Contenu du mail de test",
-                attachments: [],
-                sendDate: "07-07-2024"
-            })
-            .catch((error:string) => {
-                reject(error);
-            });
+            // récupération des mails
+            
+            await scrapper.init()
+                .catch(error => reject(error));
 
-        await exportPolicy
-            .export({
-                subject: "Sujet de test 2",
-                message: "Contenu du mail de test 2",
-                attachments: [],
-                sendDate: "09-07-2024"
-            })
-            .catch((error:string) => {
-                reject(error);
-            });
+            await scrapper.launch(exportPolicy.export)
+                .catch(error => reject(error));
 
-        // finalisation
-        await exportPolicy
-            .finalize()
-            .catch((error:string) => {
-                reject(error);
-            });
+            // finalisation
+            await exportPolicy
+                .finalize()
+                .catch(error => reject(error));
 
-        resolve();
+            resolve();
 
-        // ouverture du dossier
-        open(this.baseDirectoryManager.getAbsolutePath());
+            // ouverture du dossier
+            open(this.baseDirectoryManager.getAbsolutePath());
+        }
+        catch(error){
+            reject("Une erreur s'est produite durant l'export");
+        }
     }
 
     /**
