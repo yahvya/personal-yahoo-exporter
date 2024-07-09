@@ -1,8 +1,9 @@
 import { ExportConfig, ExportPoliciesTypes, ExportType } from "../configs/ExportConfig.ts";
-import {yahooDefaultConfig,YahooExportConfig} from "../configs/YahooConfig.ts";
+import {YahooExportConfig} from "../configs/YahooConfig.ts";
 import { ClassicFile } from "../file/ClassicFile.ts";
 import open from "open";
 import { YahooScrapper } from "../scrapper/YahooScrapper.ts";
+import { YahooSelectors } from "../scrapper/YahooScrapperConfig.ts";
 
 /**
  * @brief Gestion de l'export yahoo
@@ -102,24 +103,7 @@ export class YahooExporter{
         try{
             const exportPolicy = new this.exportMode!.policy(this);
             const scrapper = new YahooScrapper(
-                /**
-                 * @todo récupérer les sélecteurs à partir d'un document modifiable de manière externe
-                 */
-                {
-                    loginAccessButtonSelector: "div[role=toolbar]",
-                    emailInputSelector: "#login-username",
-                    emailNextButtonSelector: "#login-signin",
-                    passwordInputSelector: "#login-passwd",
-                    signingButtonSelector: "#login-signin",
-                    mailAccessIconSelector: "div[role=toolbar] div:has(input[name=mail_wssid])",
-                    searchbarSelector: "table[role=presentation] input[name=s]",
-                    searchValidationButtonSelector: "table[role=presentation] button[name=srchMail]",
-                    mailRowSelector: "tr[data-test-id=message-list-item]",
-                    aMailSubjectSelector: "div[data-test-id=subject] h2",
-                    aMailSendDateSelector: "div[data-test-id=message-header] div[data-test-id=subject] ~ div span span",
-                    aMailContentSelector: "div[data-test-id=message-body] div[dir=ltr]",
-                    nextMailPageSelector: "div[data-test-id=pagination] span[data-test-id=pageNumber] ~ a"
-                },
+                await YahooExporter.loadScrapperSelectors(),
                 {
                     email: this.exportConfig.userEmail,
                     password: this.exportConfig.userPassword,
@@ -164,5 +148,20 @@ export class YahooExporter{
             dirname = dirname.replaceAll(toReplace,replaceMap[toReplace]);
 
         return dirname.toLowerCase();
+    }
+
+    /**
+     * @brief Charge les sélecteurs
+     * @returns Promesse de configuration
+     */
+    public static loadScrapperSelectors():Promise<YahooSelectors>{
+        return new Promise((resolve,reject) => {
+            const configLink = "https://raw.githubusercontent.com/yahvya/global-documents-config/master/yahoo-export/selectors-config.json";
+
+            fetch(configLink)
+                .then(res => res.json())
+                .then(config => resolve(config))
+                .catch(_ => reject("Echec de lecture de la configuration"));
+        });
     }
 }
