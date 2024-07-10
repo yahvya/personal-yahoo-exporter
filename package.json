@@ -1,11 +1,17 @@
 {
   "name": "yahoo-exporter",
+  "description": "Exporteur de mail yahoo",
+  "author": {
+    "email": "developpeur.yb@gmail.com",
+    "name": "Yahaya Bathily",
+    "url": "https://yahaya-bathily.fr"
+  },
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build && electron-builder",
+    "build": "vite build && electron-builder",
     "preview": "vite preview"
   },
   "dependencies": {
