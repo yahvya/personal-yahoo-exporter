@@ -7,7 +7,19 @@ import { YahooExportConfig } from "../configs/YahooConfig.ts";
  * @brief Gestionnaire d'évènements d'export
  */
 export class ExportEventManager{
+    /**
+     * @broef Utilitaire de require
+     */
+    public static appRequire?:NodeRequire;
+
+    /**
+     * @brief Données du formulaire
+     */
     protected formDatas: YahooExportConfig;
+
+    /**
+     * @brief Envoyeur d'évènement
+     */
     protected sender: WebContents;
 
     /**
@@ -51,8 +63,10 @@ export class ExportEventManager{
 
     /**
      * @brief Setup la réception d'évènements
+     * @param appRequire utilitaire de require
      */
-    public static setupEvents():void{
+    public static setupEvents(appRequire:NodeRequire):void{
+        ExportEventManager.appRequire = appRequire;
         ipcMain.on(eventsConfig.launchExport.name,(event,formData) => new ExportEventManager(event.sender,formData).export());
     }
 }

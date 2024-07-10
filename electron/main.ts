@@ -4,7 +4,6 @@ import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import {ExportEventManager} from "../src/exporter/manager/ExportEventManager.ts";
 
-const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // The built directory structure
@@ -69,6 +68,6 @@ app.on('activate', () => {
 })
 
 app.whenReady().then(() => {
-  ExportEventManager.setupEvents();
+  ExportEventManager.setupEvents(createRequire(import.meta.url));
   createWindow();
 });

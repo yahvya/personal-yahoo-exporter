@@ -44,7 +44,7 @@ export class YahooExporter{
     }
 
     /**
-     * 
+     * @brief Procède à l'exportation
      * @param exportConfig 
      * @returns si l'export réussit
      */

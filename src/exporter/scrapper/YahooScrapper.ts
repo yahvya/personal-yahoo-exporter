@@ -1,6 +1,6 @@
-import puppeteer, { Browser,Page } from "puppeteer";
 import { YahooAccountConfig, YahooSelectors } from "./YahooScrapperConfig.ts";
 import { MailConfig } from "../configs/MailConfig.ts";
+import { ExportEventManager } from "../manager/ExportEventManager.ts";
 
 /**
  * @brief Fonction de traitement de mail
@@ -20,7 +20,7 @@ export class YahooScrapper{
     /**
      * @brief Page d'exécution
      */
-    protected page?:Page;
+    protected page?:any;
 
     /**
      * @brief Configuration des sélecteurs yahoo
@@ -35,7 +35,7 @@ export class YahooScrapper{
     /**
      * @brief Navigateur
      */
-    protected browser?:Browser;
+    protected browser?:any;
 
     /**
      * 
@@ -53,6 +53,8 @@ export class YahooScrapper{
     public async init():Promise<void>{
         return new Promise(async (resolve,reject) => {
             try{
+                const puppeteer = ExportEventManager.appRequire!("puppeteer");
+
                 this.browser = await puppeteer.launch({
                     headless: false,
                     defaultViewport: null,
@@ -225,8 +227,8 @@ export class YahooScrapper{
      */
     protected async getCountOfMailsOnPage():Promise<number>{
         return new Promise<number>(async(resolve,reject) => {
-            const countOfMails:number|void = await this.page?.$$eval(this.selectorsConfig.mailRowSelector,(elements) => elements.length)
-                .catch((_) => reject("Echec de récupération du nombre de mails"));
+            const countOfMails:number|void = await this.page?.$$eval(this.selectorsConfig.mailRowSelector,(elements:any) => elements.length)
+                .catch((_:string) => reject("Echec de récupération du nombre de mails"));
 
             if(typeof countOfMails === "number")
                 resolve(countOfMails);

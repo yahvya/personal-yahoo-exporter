@@ -20,13 +20,13 @@
                 isValidating: false,
                 errorMessage: null,
                 form: {
-                    userEmail: "test@yahoo.fr",
-                    userPassword: "test-password",
-                    conversationEmail: "test2@yahoo.fr",
-                    savePath: "C:\\Users\\devel\\Desktop\\fichiers-temporaires",
-                    saveDirname: "savedir",
-                    exportMode: "files-list",
-                    controlChoice: "yes"
+                    userEmail: "",
+                    userPassword: "",
+                    conversationEmail: "",
+                    savePath: "",
+                    saveDirname: "",
+                    exportMode: "",
+                    controlChoice: ""
                 }
             }
         },
@@ -41,10 +41,10 @@
              * @brief Gère la réception des résultats d'exportation
              */
             handleExportResult(_,successState,message = null){
-                this.isValidating = false;
-                
                 if(successState == EventState.FAILURE)
                     this.errorMessage = message;
+
+                this.isValidating = false;
             },
             /**
              * @brief Gère l'envoi des données
