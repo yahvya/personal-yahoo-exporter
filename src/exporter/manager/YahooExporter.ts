@@ -4,6 +4,7 @@ import { ClassicFile } from "../file/ClassicFile.ts";
 import open from "open";
 import { YahooScrapper } from "../scrapper/YahooScrapper.ts";
 import { YahooSelectors } from "../scrapper/YahooScrapperConfig.ts";
+import { MailConfig } from "../configs/MailConfig.ts";
 
 /**
  * @brief Gestion de l'export yahoo
@@ -116,7 +117,8 @@ export class YahooExporter{
             await scrapper.init()
                 .catch(error => reject(error));
 
-            await scrapper.launch(exportPolicy.export)
+            // envoi de closure conserver le contexte (this)
+            await scrapper.launch((mailConfig:MailConfig) => exportPolicy.export(mailConfig))
                 .catch(error => reject(error));
 
             // finalisation

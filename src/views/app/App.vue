@@ -74,6 +74,8 @@
         Veuillez fournir les informations demandées et patienter le temps de la récupération.
         <br>
         Certaines actions ne peuvent pas être automatisé (comme les vérifications de robot), assurez vous de gérer manuellement dans le navigateur les actions manuelles ;)
+        <br>
+        Assurez vous également d'être sur la version classique de yahoo
     </InfoMessage>
 
     <form

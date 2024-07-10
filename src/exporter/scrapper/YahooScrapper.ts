@@ -245,7 +245,7 @@ export class YahooScrapper{
     protected static mailClickHandler(mailRowSelector:string,mailIndex:number):void{
         const mailRow = document.querySelectorAll(mailRowSelector)[mailIndex];
         
-        mailRow.querySelector("span")?.click();
+        mailRow.querySelectorAll("span").forEach(el => el.click());
     }
 
     /**
