@@ -1,6 +1,4 @@
 <script>
-    import "./FormInput.css";
-
     export default{
         props: ["modelValue"]
     }
@@ -16,3 +14,7 @@
         @input="$emit('update:modelValue', $event.target.value)"
     />
 </template>
+
+<style scoped src="./FormInput.css">
+
+</style>

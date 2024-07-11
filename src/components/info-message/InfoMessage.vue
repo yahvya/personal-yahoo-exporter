@@ -1,6 +1,4 @@
 <script>
-    import "./InfoMessage.css";
-
     export default{
         props: {
             isCentered: Boolean
@@ -14,3 +12,7 @@
         class="info-message upper-bg"
     ><slot></slot></p>
 </template>
+
+<style src="./InfoMessage.css" scoped>
+
+</style>

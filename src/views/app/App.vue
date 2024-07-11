@@ -1,5 +1,4 @@
 <script>
-    import "./App.css";
     import InfoMessage from "@/components/info-message/InfoMessage.vue";
     import FormInput from "@/components/form-input/FormInput.vue";
     import Button from "@/components/button/Button.vue";
@@ -194,3 +193,7 @@
         <Button>Démarrer la récupération</Button>
     </form>
 </template>
+
+<style src="./App.css">
+
+</style>
