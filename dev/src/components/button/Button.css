@@ -1,0 +1,4 @@
+.app-button{
+    border: solid 1px var(--on-background-color);
+    cursor: pointer;
+}
